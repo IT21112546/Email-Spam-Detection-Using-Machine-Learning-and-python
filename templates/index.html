@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Email Spam Classifier</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color:#c6cacb;
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 100px;
+            width: 60%;
+        }
+        h1 {
+            background-color: #03a7d0;
+            color: #fff;
+            font-size: 60px;
+            padding: 20px;
+            text-align: center;
+            margin: 0;
+        }
+        #email-form {
+            padding: 20px;
+        }
+        label {
+            display: block;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        #email-text {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 15px;
+            
+        }
+        #classify-button {
+            background-color: #03a7d0;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 40px;
+            color:#FF0000;
+           
+            
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Email Spam Classifier</h1>
+        <form id="email-form">
+            <label for="email-text">Enter Email Text:</label>
+            <textarea id="email-text" rows="4" cols="50" placeholder="Type or paste your email here..."></textarea>
+            <br>
+            <button type="button" id="classify-button">Classify</button>
+        </form>
+    <p id="result"></p>
+    </div>
+
+    <script>
+        document.getElementById('classify-button').addEventListener('click', function() {
+            var emailText = document.getElementById('email-text').value;
+            fetch('/classify', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({text: emailText}),
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerHTML = ' ' + (data.prediction === 1 ? alert("Spam") : alert('Not Spam'));
+                document.getElementById('result').innerHTML = ' ' + (data.prediction === 1 ? 'Spam' : 'Not Spam' );
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
